@@ -13,5 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ChallengeItemTaskDto {
     private int id;
-    private List<ChoiceDto> choiceDtoList;
+    private String question;
+    private List<ChoiceDto> choiceList;
 }

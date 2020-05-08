@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChoiceDto {
-    private int id;
+    private long id;
     private String value;
 }

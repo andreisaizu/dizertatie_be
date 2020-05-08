@@ -1,5 +1,6 @@
 package dizertatie.be.dizertatie.controller.responses;
 
+import dizertatie.be.dizertatie.enums.ChallengeItemType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,5 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ChallengeItemDto {
     private int id;
-    private List<ChallengeItemTaskDto> challengeItemTaskDtoList;
+    private String description;
+    private List<ChallengeItemTaskDto> challengeItemTaskList;
+    private String challengeItemType;
 }
