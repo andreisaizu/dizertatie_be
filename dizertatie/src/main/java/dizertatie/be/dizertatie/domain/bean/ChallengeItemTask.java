@@ -17,6 +17,10 @@ public class ChallengeItemTask {
     @Column(name = "question", nullable = false)
     private String question;
 
+
+    @Column(name = "explanation", nullable = false)
+    private String explanation;
+
     @OneToMany(mappedBy="challengeItemTask", targetEntity= ChoiceItem.class)
     private List<ChoiceItem> choiceItemList;
 
@@ -56,4 +60,11 @@ public class ChallengeItemTask {
         this.challengeItem = challengeItem;
     }
 
+    public String getExplanation() {
+        return explanation;
+    }
+
+    public void setExplanation(String explanation) {
+        this.explanation = explanation;
+    }
 }

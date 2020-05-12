@@ -16,8 +16,20 @@ public class ChoiceItem {
     @Column(name = "value", nullable = false)
     private String value;
 
+
+    @Column(name = "correct", nullable = false)
+    private Boolean correct;
+
     public ChallengeItemTask getChallengeItemTask() {
         return challengeItemTask;
+    }
+
+    public Boolean getCorrect() {
+        return correct;
+    }
+
+    public void setCorrect(Boolean correct) {
+        this.correct = correct;
     }
 
     public void setChallengeItemTask(ChallengeItemTask challengeItemTask) {
@@ -25,7 +37,7 @@ public class ChoiceItem {
     }
 
     @ManyToOne
-    @JoinColumn(name="challenge_item_task_id", referencedColumnName="id", nullable=false)
+    @JoinColumn(name = "challenge_item_task_id", referencedColumnName = "id", nullable = false)
     private ChallengeItemTask challengeItemTask;
 
     public Long getId() {

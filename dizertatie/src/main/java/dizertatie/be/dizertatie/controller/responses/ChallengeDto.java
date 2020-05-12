@@ -11,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChallengeDto {
-    private int id;
+    private long id;
     private List<ChallengeItemDto> challengeItemList;
 }

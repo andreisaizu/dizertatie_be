@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChallengeItemDto {
-    private int id;
+    private long id;
     private String description;
     private List<ChallengeItemTaskDto> challengeItemTaskList;
     private String challengeItemType;

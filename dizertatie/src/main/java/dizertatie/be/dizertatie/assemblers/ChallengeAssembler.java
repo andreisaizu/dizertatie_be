@@ -9,12 +9,14 @@ import java.util.List;
 public class ChallengeAssembler {
     public static ChallengeDto assembleChallengeDto(Challenge challenge) {
         return ChallengeDto.builder()
+                .id(challenge.getId())
                 .challengeItemList(assembleChallengeItemList(challenge.getChallengeItemList()))
                 .build();
     }
 
     public static ChallengeItemDto assembleChallengeItemDto(ChallengeItem challengeItem) {
         return ChallengeItemDto.builder()
+                .id(challengeItem.getId())
                 .description(challengeItem.getDescription())
                 .challengeItemType(challengeItem.getChallengeItemType())
                 .challengeItemTaskList(assembleChallengeItemTaskList(challengeItem.getChallengeItemTaskList()))
@@ -23,6 +25,7 @@ public class ChallengeAssembler {
 
     public static ChallengeItemTaskDto assembleChallengeItemTaskDto(ChallengeItemTask challengeItemTask) {
         return ChallengeItemTaskDto.builder()
+                .id(challengeItemTask.getId())
                 .question(challengeItemTask.getQuestion())
                 .choiceList(assembleItemTaskChoiceDtoList(challengeItemTask.getChoiceItemList()))
                 .build();

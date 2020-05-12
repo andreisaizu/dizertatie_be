@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChallengeItemTaskDto {
-    private int id;
+    private long id;
     private String question;
     private List<ChoiceDto> choiceList;
 }
