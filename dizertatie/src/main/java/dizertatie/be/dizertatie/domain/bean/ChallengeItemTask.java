@@ -11,6 +11,8 @@ import java.util.List;
 })
 public class ChallengeItemTask {
     @Id
+    @SequenceGenerator(name = "challenge_item_task_sequence_generator", sequenceName = "challenge_item_task_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "challenge_item_task_sequence_generator" )
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -20,6 +22,9 @@ public class ChallengeItemTask {
 
     @Column(name = "explanation", nullable = false)
     private String explanation;
+
+    @Column(name = "points", nullable = false)
+    private Integer points;
 
     @OneToMany(mappedBy="challengeItemTask", targetEntity= ChoiceItem.class)
     private List<ChoiceItem> choiceItemList;
@@ -42,6 +47,13 @@ public class ChallengeItemTask {
 
     public void setQuestion(String question) {
         this.question = question;
+    }
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
     }
 
     public List<ChoiceItem> getChoiceItemList() {

@@ -10,6 +10,8 @@ import javax.persistence.*;
 })
 public class ChoiceItem {
     @Id
+    @SequenceGenerator(name = "choice_sequence_generator", sequenceName = "choice_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "choice_sequence_generator" )
     @Column(name = "id", nullable = false)
     private Long id;
 

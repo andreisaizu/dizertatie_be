@@ -13,6 +13,8 @@ import java.util.List;
 public class Challenge {
 
     @Id
+    @SequenceGenerator(name = "challenge_sequence_generator", sequenceName = "challenge_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "challenge_sequence_generator" )
     @Column(name = "id", nullable = false)
     private Long id;
 

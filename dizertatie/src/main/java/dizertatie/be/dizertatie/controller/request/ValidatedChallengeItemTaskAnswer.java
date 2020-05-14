@@ -6,12 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class ChallengeItemTaskAnswer {
+public class ValidatedChallengeItemTaskAnswer {
     long challengeItemTaskId;
-    List<Long> selectedChoicesIds;
     List<TaskChoiceDto> taskChoiceDtoList;
+    List<String> correctChoicesValues;
+    private boolean correct;
+    private String question;
+    private String explanation;
+    private Integer points;
 
-    public ChallengeItemTaskAnswer() {
+    public ValidatedChallengeItemTaskAnswer() {
         taskChoiceDtoList = new ArrayList<>();
     }
 

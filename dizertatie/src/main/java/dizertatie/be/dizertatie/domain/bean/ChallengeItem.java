@@ -13,6 +13,8 @@ import java.util.List;
 })
 public class ChallengeItem {
     @Id
+    @SequenceGenerator(name = "challenge_item_sequence_generator", sequenceName = "challenge_item_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "challenge_item_sequence_generator" )
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -26,7 +28,7 @@ public class ChallengeItem {
     @JoinColumn(name="challenge_id",referencedColumnName="id", nullable=false)
     private Challenge challenge;
 
-    @OneToMany(mappedBy="challengeItem", targetEntity= ChallengeItemTask.class)
+    @OneToMany(mappedBy="challengeItem", targetEntity= ChallengeItemTask.class, cascade = CascadeType.PERSIST)
     private List<ChallengeItemTask> challengeItemTaskList;
 
     public String getChallengeItemType() {

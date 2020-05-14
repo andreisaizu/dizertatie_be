@@ -13,6 +13,8 @@ import java.util.List;
 public class Account {
 
     @Id
+    @SequenceGenerator(name = "account_sequence_generator", sequenceName = "account_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_sequence_generator" )
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -22,6 +24,16 @@ public class Account {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    @Column(name = "score")
+    private Integer score;
 
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
@@ -31,12 +43,24 @@ public class Account {
     )
     List<Challenge> challengeList = new ArrayList<>();
 
+
+    @OneToMany(mappedBy="account", targetEntity= ChallengeAttempt.class)
+    private List<ChallengeAttempt> challengeAttemptList;
+
     public List<Challenge> getChallengeList() {
         return challengeList;
     }
 
     public void setChallengeList(List<Challenge> challengeList) {
         this.challengeList = challengeList;
+    }
+
+    public List<ChallengeAttempt> getChallengeAttemptList() {
+        return challengeAttemptList;
+    }
+
+    public void setChallengeAttemptList(List<ChallengeAttempt> challengeAttemptList) {
+        this.challengeAttemptList = challengeAttemptList;
     }
 
     public Long getId() {
