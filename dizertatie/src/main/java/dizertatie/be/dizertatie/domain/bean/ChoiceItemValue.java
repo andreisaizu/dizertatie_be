@@ -18,6 +18,10 @@ public class ChoiceItemValue {
     @Column(name = "value", nullable = false)
     private String value;
 
+
+    @Column(name = "order")
+    private Integer order;
+
     public ChoiceItem getChoiceItem() {
         return choiceItem;
     }
@@ -36,6 +40,14 @@ public class ChoiceItemValue {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 
     public String getValue() {

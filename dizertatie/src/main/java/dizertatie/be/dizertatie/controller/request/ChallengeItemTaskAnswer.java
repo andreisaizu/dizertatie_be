@@ -9,6 +9,7 @@ import java.util.List;
 public class ChallengeItemTaskAnswer {
     long challengeItemTaskId;
     List<Long> selectedChoicesIds;
+    List<String> selectedChoicesValues;
     List<TaskChoiceDto> taskChoiceDtoList;
 
     public ChallengeItemTaskAnswer() {
