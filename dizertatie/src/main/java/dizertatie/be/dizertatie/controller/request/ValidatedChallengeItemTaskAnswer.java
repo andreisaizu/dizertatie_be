@@ -1,5 +1,6 @@
 package dizertatie.be.dizertatie.controller.request;
 
+import dizertatie.be.dizertatie.controller.responses.ChoiceDto;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
 public class ValidatedChallengeItemTaskAnswer {
     long challengeItemTaskId;
     List<TaskChoiceDto> taskChoiceDtoList;
-    List<String> correctChoicesValues;
+    List<ChoiceDto> correctChoices;
     private boolean correct;
     private String question;
     private String explanation;

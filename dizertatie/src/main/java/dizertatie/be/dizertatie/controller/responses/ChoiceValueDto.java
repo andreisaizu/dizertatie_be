@@ -5,13 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChoiceDto {
+public class ChoiceValueDto {
     private long id;
-    private List<ChoiceValueDto> choiceValueDtoList;
+    private String value;
 }

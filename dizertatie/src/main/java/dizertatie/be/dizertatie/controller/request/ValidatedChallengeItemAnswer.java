@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class ValidatedChallengeItemAnswer {
     long challengeItemId;
+    private String type;
     List<ValidatedChallengeItemTaskAnswer> taskAnswers;
 
     public ValidatedChallengeItemAnswer() {

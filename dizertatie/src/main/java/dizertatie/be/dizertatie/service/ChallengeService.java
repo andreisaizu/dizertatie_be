@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static dizertatie.be.dizertatie.assemblers.ChallengeAssembler.assembleChallengeDto;
+import static dizertatie.be.dizertatie.assemblers.ChallengeAssembler.assembleItemTaskChoiceDtoList;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +31,7 @@ public class ChallengeService {
 
         Challenge challenge = challengeDomainService.findById(receivedChallengeAnswer.getChallengeId());
         List<ChallengeItemAnswer> receivedChallengeItemAnswerList = receivedChallengeAnswer.getChallengeItemAnswers();
+
         for (ChallengeItemAnswer receivedChallengeItemAnswer : receivedChallengeItemAnswerList) {
             ValidatedChallengeItemAnswer validatedChallengeItemAnswer = new ValidatedChallengeItemAnswer();
             validatedChallengeItemAnswer.setChallengeItemId(receivedChallengeItemAnswer.getChallengeItemId());
@@ -38,6 +40,8 @@ public class ChallengeService {
                     .filter(ch -> ch.getId() == receivedChallengeItemAnswer.getChallengeItemId())
                     .findFirst()
                     .get();
+
+            validatedChallengeItemAnswer.setType(challengeItem.getChallengeItemType());
 
             List<ChallengeItemTaskAnswer> receivedTaskAnswers = receivedChallengeItemAnswer.getTaskAnswers();
             for (ChallengeItemTaskAnswer receivedTaskAnswer : receivedTaskAnswers) {
@@ -57,45 +61,41 @@ public class ChallengeService {
                 List<Long> selectedChoiceIds = receivedTaskAnswer.getSelectedChoicesIds();
                 List<TaskChoiceDto> taskChoiceDtoList = new ArrayList<>();
                 for (ChoiceItem choiceItem : choiceList) {
-                    TaskChoiceDto taskChoiceDto =TaskChoiceDto.builder()
-                            .value(choiceItem.getValue())
+                    TaskChoiceDto taskChoiceDto = TaskChoiceDto.builder()
+                            .values(choiceItem.getChoiceItemValueList().stream().map(ChoiceItemValue::getValue).collect(Collectors.toList()))
                             .id(choiceItem.getId())
                             .correct(choiceItem.getCorrect())
                             .selected(false)
                             .build();
-                    if(selectedChoiceIds.contains(choiceItem.getId())){
+                    if (selectedChoiceIds.contains(choiceItem.getId())) {
                         taskChoiceDto.setSelected(true);
                     }
                     taskChoiceDtoList.add(taskChoiceDto);
                 }
 
-
-                List<Long> correctChoiceList = choiceList.stream()
+                List<ChoiceItem> correctChoiceList = choiceList.stream()
                         .filter(ChoiceItem::getCorrect)
-                        .map(ChoiceItem::getId)
                         .collect(Collectors.toList());
 
-                List<String> correctChoiceValueList = choiceList.stream()
-                        .filter(ChoiceItem::getCorrect)
-                        .map(ChoiceItem::getValue)
+
+                validatedChallengeItemTaskAnswer.setExplanation(challengeItemTask.getExplanation());
+                validatedChallengeItemTaskAnswer.setPoints(0);
+
+
+                boolean correctTask = false;
+                validatedChallengeItemTaskAnswer.setPoints(0);
+                List<TaskChoiceDto> presumedCorrectList = taskChoiceDtoList.stream()
+                        .filter(TaskChoiceDto::isSelected)
+                        .filter(TaskChoiceDto::isCorrect)
                         .collect(Collectors.toList());
-                boolean correctTask = true;
-                validatedChallengeItemTaskAnswer.setPoints(challengeItemTask.getPoints());
-
-                for (Long choiceId : selectedChoiceIds) {
-
-                    if (!correctChoiceList.contains(choiceId)) {
-                        correctTask = false;
-                        validatedChallengeItemTaskAnswer.setExplanation(challengeItemTask.getExplanation());
-                        validatedChallengeItemTaskAnswer.setPoints(0);
-                    }
+                if(presumedCorrectList.size() == selectedChoiceIds.size()){
+                    correctTask = true;
+                    validatedChallengeItemTaskAnswer.setPoints(challengeItemTask.getPoints());
                 }
-
-
 
                 validatedChallengeItemTaskAnswer.setCorrect(correctTask);
                 validatedChallengeItemTaskAnswer.setTaskChoiceDtoList(taskChoiceDtoList);
-                validatedChallengeItemTaskAnswer.setCorrectChoicesValues(correctChoiceValueList);
+                validatedChallengeItemTaskAnswer.setCorrectChoices(assembleItemTaskChoiceDtoList(correctChoiceList));
                 validatedChallengeItemAnswer.add(validatedChallengeItemTaskAnswer);
 
             }

@@ -4,6 +4,7 @@ import dizertatie.be.dizertatie.controller.responses.*;
 import dizertatie.be.dizertatie.domain.bean.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ChallengeAssembler {
@@ -16,7 +17,7 @@ public class ChallengeAssembler {
 
     public static ChallengeItemDto assembleChallengeItemDto(ChallengeItem challengeItem) {
         return ChallengeItemDto.builder()
-                .id(challengeItem.getId())
+                .id(challengeItem.getId().intValue())
                 .description(challengeItem.getDescription())
                 .challengeItemType(challengeItem.getChallengeItemType())
                 .challengeItemTaskList(assembleChallengeItemTaskList(challengeItem.getChallengeItemTaskList()))
@@ -33,7 +34,7 @@ public class ChallengeAssembler {
 
     public static List<ChoiceDto> assembleItemTaskChoiceDtoList(List<ChoiceItem> choiceItemList) {
         List<ChoiceDto> choiceDtoList = new ArrayList<>();
-        for(ChoiceItem choiceItem : choiceItemList){
+        for (ChoiceItem choiceItem : choiceItemList) {
             ChoiceDto choiceDto = assembleItemTaskChoiceDto(choiceItem);
             choiceDtoList.add(choiceDto);
         }
@@ -41,8 +42,29 @@ public class ChallengeAssembler {
     }
 
     public static ChoiceDto assembleItemTaskChoiceDto(ChoiceItem choiceItem) {
-        return ChoiceDto.builder().id(choiceItem.getId()).value(choiceItem.getValue()).build();
+        return ChoiceDto.builder()
+                .id(choiceItem.getId())
+                .choiceValueDtoList(assembleChoiceValueDtoList(choiceItem.getChoiceItemValueList()))
+                .build();
     }
+
+    private static List<ChoiceValueDto> assembleChoiceValueDtoList(List<ChoiceItemValue> choiceItemValueList) {
+        List<ChoiceValueDto> choiceValueDtoList = new ArrayList<>();
+        for (ChoiceItemValue choiceItemValue : choiceItemValueList) {
+            ChoiceValueDto choiceValueDto = assembleChoiceValueDto(choiceItemValue);
+            choiceValueDtoList.add(choiceValueDto);
+        }
+        return choiceValueDtoList;
+    }
+
+
+    private static ChoiceValueDto assembleChoiceValueDto(ChoiceItemValue choiceItemValue) {
+        return ChoiceValueDto.builder()
+                .id(choiceItemValue.getId())
+                .value(choiceItemValue.getValue())
+                .build();
+    }
+
 
     public static List<ChallengeItemDto> assembleChallengeItemList(List<ChallengeItem> challengeItemList) {
         List<ChallengeItemDto> challengeItemDtoList = new ArrayList<>();
@@ -50,6 +72,7 @@ public class ChallengeAssembler {
             ChallengeItemDto challengeItemDto = assembleChallengeItemDto(challengeItem);
             challengeItemDtoList.add(challengeItemDto);
         }
+        Collections.sort(challengeItemDtoList);
         return challengeItemDtoList;
     }
 

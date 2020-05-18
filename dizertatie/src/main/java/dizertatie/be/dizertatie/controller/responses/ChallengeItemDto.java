@@ -12,9 +12,14 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChallengeItemDto {
-    private long id;
+public class ChallengeItemDto implements Comparable{
+    private int id;
     private String description;
     private List<ChallengeItemTaskDto> challengeItemTaskList;
     private String challengeItemType;
+
+    @Override
+    public int compareTo(Object challengeItemDto) {
+        return this.id - ((ChallengeItemDto)challengeItemDto).getId();
+    }
 }
