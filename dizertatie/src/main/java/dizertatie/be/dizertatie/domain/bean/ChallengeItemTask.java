@@ -1,5 +1,7 @@
 package dizertatie.be.dizertatie.domain.bean;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -16,6 +18,9 @@ public class ChallengeItemTask {
     @Column(name = "id", nullable = false)
     private Long id;
 
+
+    private String uuid;
+
     @Column(name = "question", nullable = false)
     private String question;
 
@@ -31,6 +36,7 @@ public class ChallengeItemTask {
 
     @ManyToOne
     @JoinColumn(name="challenge_item_id", referencedColumnName="id",  nullable=false)
+    @JsonBackReference
     private ChallengeItem challengeItem;
 
     public Long getId() {
@@ -39,6 +45,14 @@ public class ChallengeItemTask {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getQuestion() {

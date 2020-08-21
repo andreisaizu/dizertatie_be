@@ -24,6 +24,14 @@ public class AccountDomainService {
     private AccountRepository accountRepository;
 
 
+    public Account findByUserNameAndPassword(String username, String password) {
+        return accountRepository.findByUsernameAndPassword(username, password);
+    }
+
+    public Account findByUsername(String username) {
+        return accountRepository.findByUsername(username);
+    }
+
     public Account findById(Long id) {
         return accountRepository.findById(id).isPresent() ? accountRepository.findById(id).get() : null;
     }

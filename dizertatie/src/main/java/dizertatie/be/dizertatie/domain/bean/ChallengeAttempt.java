@@ -1,6 +1,9 @@
 package dizertatie.be.dizertatie.domain.bean;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -9,10 +12,10 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "ChallengeAttempt.countAll", query = "SELECT COUNT(x) FROM ChallengeAttempt x")
 })
-public class ChallengeAttempt {
+public class ChallengeAttempt implements Comparable<ChallengeAttempt> {
     @Id
     @SequenceGenerator(name = "challenge_attempt_sequence_generator", sequenceName = "challenge_attempt_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "challenge_attempt_sequence_generator" )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "challenge_attempt_sequence_generator")
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -35,15 +38,21 @@ public class ChallengeAttempt {
     @Column(name = "score")
     private Integer score;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date")
+    private Date createdAt;
+
     @ManyToOne
-    @JoinColumn(name="challenge_id",referencedColumnName="id", nullable=false)
+    @JsonBackReference
+    @JoinColumn(name = "challenge_id", referencedColumnName = "id", nullable = false)
     private Challenge challenge;
 
-    @OneToMany(mappedBy="challengeAttempt", targetEntity= ChallengeItemAttempt.class, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "challengeAttempt", targetEntity = ChallengeItemAttempt.class, cascade = CascadeType.PERSIST)
     private List<ChallengeItemAttempt> challengeItemAttemptList;
 
     @ManyToOne
-    @JoinColumn(name="account_id",referencedColumnName="id", nullable=false)
+    @JoinColumn(name = "account_id", referencedColumnName = "id", nullable = false)
+    @JsonBackReference
     private Account account;
 
     public Long getId() {
@@ -70,4 +79,23 @@ public class ChallengeAttempt {
         this.account = account;
     }
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public int compareTo(ChallengeAttempt o) {
+        if (this.getCreatedAt() == null || o.getCreatedAt() == null) {
+            return 0;
+        }
+        if (this.getCreatedAt().before(o.getCreatedAt())) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
 }

@@ -17,6 +17,7 @@ public class ValidatedChallengeItemTaskAnswer {
     private Integer points;
 
     public ValidatedChallengeItemTaskAnswer() {
+        points = 0;
         taskChoiceDtoList = new ArrayList<>();
     }
 

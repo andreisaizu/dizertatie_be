@@ -1,5 +1,7 @@
 package dizertatie.be.dizertatie.domain.bean;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -17,10 +19,12 @@ public class ChallengeItemTaskAttempt {
 
     @ManyToOne
     @JoinColumn(name="challenge_item_attempt_id",referencedColumnName="id", nullable=false)
+    @JsonBackReference
     private ChallengeItemAttempt challengeItemAttempt;
 
     @ManyToOne
     @JoinColumn(name="challenge_item_task_id",referencedColumnName="id", nullable=false)
+    @JsonBackReference
     private ChallengeItemTask challengeItemTask;
 
     @Column(name = "valid", nullable = false)

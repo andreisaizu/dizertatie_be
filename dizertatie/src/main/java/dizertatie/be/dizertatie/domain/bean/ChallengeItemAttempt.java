@@ -1,5 +1,7 @@
 package dizertatie.be.dizertatie.domain.bean;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -26,10 +28,12 @@ public class ChallengeItemAttempt {
 
     @ManyToOne
     @JoinColumn(name="challenge_item_id",referencedColumnName="id", nullable=false)
+    @JsonBackReference
     private ChallengeItem challengeItem;
 
     @ManyToOne
     @JoinColumn(name="challenge_attempt_id",referencedColumnName="id", nullable=false)
+    @JsonBackReference
     private ChallengeAttempt challengeAttempt;
 
     @OneToMany(mappedBy="challengeItemAttempt", targetEntity= ChallengeItemTaskAttempt.class, cascade = CascadeType.PERSIST)

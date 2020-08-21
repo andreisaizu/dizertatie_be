@@ -13,5 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ChoiceDto {
     private long id;
+    private boolean correct;
     private List<ChoiceValueDto> choiceValueDtoList;
 }

@@ -8,6 +8,10 @@ package dizertatie.be.dizertatie.domain.service;
 //import io.swagger.models.auth.In;
 
 import dizertatie.be.dizertatie.domain.bean.Challenge;
+import dizertatie.be.dizertatie.domain.bean.ChallengeItem;
+import dizertatie.be.dizertatie.domain.bean.ChallengeItemTask;
+import dizertatie.be.dizertatie.domain.repository.ChallengeItemRepository;
+import dizertatie.be.dizertatie.domain.repository.ChallengeItemTaskRepository;
 import dizertatie.be.dizertatie.domain.repository.ChallengeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +26,15 @@ public class ChallengeDomainService {
 
     @Autowired
     private ChallengeRepository challengeRepository;
+
+    @Autowired
+    private ChallengeItemRepository challengeItemRepository;
+
+
+    @Autowired
+    private ChallengeItemTaskRepository challengeItemTaskRepository;
+
+    private ChallengeItemTaskDomainService challengeItemTaskDomainService;
 
 
     public Challenge findById(Long id) {
@@ -45,5 +58,6 @@ public class ChallengeDomainService {
         Challenge saved = challengeRepository.save(record);
         return saved;
     }
+
 
 }

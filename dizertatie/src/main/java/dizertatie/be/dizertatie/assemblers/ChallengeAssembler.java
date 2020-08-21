@@ -11,6 +11,7 @@ public class ChallengeAssembler {
     public static ChallengeDto assembleChallengeDto(Challenge challenge) {
         return ChallengeDto.builder()
                 .id(challenge.getId())
+                .title(challenge.getTitle())
                 .challengeItemList(assembleChallengeItemList(challenge.getChallengeItemList()))
                 .build();
     }
@@ -44,6 +45,7 @@ public class ChallengeAssembler {
     public static ChoiceDto assembleItemTaskChoiceDto(ChoiceItem choiceItem) {
         return ChoiceDto.builder()
                 .id(choiceItem.getId())
+                .correct(choiceItem.getCorrect())
                 .choiceValueDtoList(assembleChoiceValueDtoList(choiceItem.getChoiceItemValueList()))
                 .build();
     }

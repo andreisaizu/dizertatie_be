@@ -10,6 +10,9 @@ import dizertatie.be.dizertatie.domain.bean.ChallengeAttempt;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.awt.print.Pageable;
+import java.util.List;
+
 /**
  * Spring JPA Repository for OriLogs
  * 
@@ -19,4 +22,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChallengeAttemptRepository extends CrudRepository<ChallengeAttempt, Long> {
     ChallengeAttempt findFirstByAccount_IdAndChallenge_IdAndIdNotOrderByScoreDesc(Long accountId, Long challengeId, Long currentChallengeAttemptId);
+    List<ChallengeAttempt> findByAccount_Username(String userName);
+    List<ChallengeAttempt> findByAccount_UsernameAndChallenge_IdOrderByCreatedAtDesc(String userName, Long id);
 }

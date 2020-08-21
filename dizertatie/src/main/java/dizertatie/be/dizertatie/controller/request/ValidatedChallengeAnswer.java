@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class ValidatedChallengeAnswer {
     private long challengeId;
+    private int totalScore;
     private List<ValidatedChallengeItemAnswer> challengeItemAnswers;
 
     public ValidatedChallengeAnswer(){

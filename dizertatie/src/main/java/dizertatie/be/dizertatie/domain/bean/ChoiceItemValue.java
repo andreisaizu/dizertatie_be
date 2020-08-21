@@ -1,5 +1,8 @@
 package dizertatie.be.dizertatie.domain.bean;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import dizertatie.be.dizertatie.controller.responses.ChallengeItemDto;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,7 +11,7 @@ import javax.persistence.*;
 @NamedQueries({
         @NamedQuery(name = "ChoiceItemValue.countAll", query = "SELECT COUNT(x) FROM ChoiceItemValue x")
 })
-public class ChoiceItemValue {
+public class ChoiceItemValue implements Comparable{
     @Id
     @SequenceGenerator(name = "choice_sequence_generator", sequenceName = "choice_item_value_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "choice_sequence_generator" )
@@ -18,6 +21,8 @@ public class ChoiceItemValue {
     @Column(name = "value", nullable = false)
     private String value;
 
+
+    private String uuid;
 
     @Column(name = "order")
     private Integer order;
@@ -32,6 +37,7 @@ public class ChoiceItemValue {
 
     @ManyToOne
     @JoinColumn(name = "choice_item_id", referencedColumnName = "id", nullable = false)
+    @JsonBackReference
     private ChoiceItem choiceItem;
 
     public Long getId() {
@@ -46,6 +52,13 @@ public class ChoiceItemValue {
         return order;
     }
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
     public void setOrder(Integer order) {
         this.order = order;
     }
@@ -56,5 +69,10 @@ public class ChoiceItemValue {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return this.order - ((ChoiceItemValue)o).getOrder();
     }
 }

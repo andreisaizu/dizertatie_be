@@ -2,6 +2,8 @@ package dizertatie.be.dizertatie.service;
 
 import dizertatie.be.dizertatie.controller.request.*;
 import dizertatie.be.dizertatie.controller.responses.ChallengeDto;
+import dizertatie.be.dizertatie.controller.responses.ChallengeItemDto2;
+import dizertatie.be.dizertatie.controller.responses.ChallengeItemTaskDto2;
 import dizertatie.be.dizertatie.domain.bean.*;
 import dizertatie.be.dizertatie.domain.service.ChallengeDomainService;
 import dizertatie.be.dizertatie.enums.ChallengeTemplate;
@@ -9,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +28,12 @@ public class ChallengeService {
         Challenge challenge = challengeDomainService.findById(1L);
         return assembleChallengeDto(challenge);
     }
+
+    public ChallengeDto getChallengeDtoById(Long challengeId) {
+        Challenge challenge = challengeDomainService.findById(challengeId);
+        return assembleChallengeDto(challenge);
+    }
+
 
     public ValidatedChallengeAnswer validateAnswer(ChallengeAnswer receivedChallengeAnswer) {
         ValidatedChallengeAnswer validatedChallengeAnswer = new ValidatedChallengeAnswer();
@@ -64,37 +73,29 @@ public class ChallengeService {
                     List<ChoiceItem> choiceList = challengeItemTask.getChoiceItemList();
                     List<Long> selectedChoiceIds = receivedTaskAnswer.getSelectedChoicesIds();
                     List<TaskChoiceDto> taskChoiceDtoList = new ArrayList<>();
+                    validatedChallengeItemTaskAnswer.setCorrect(true);
                     for (ChoiceItem choiceItem : choiceList) {
                         TaskChoiceDto taskChoiceDto = TaskChoiceDto.builder()
                                 .values(choiceItem.getChoiceItemValueList().stream().map(ChoiceItemValue::getValue).collect(Collectors.toList()))
                                 .id(choiceItem.getId())
                                 .correct(choiceItem.getCorrect())
                                 .selected(false)
+                                .points(0)
                                 .build();
                         if (selectedChoiceIds.contains(choiceItem.getId())) {
                             taskChoiceDto.setSelected(true);
+                            if (taskChoiceDto.isCorrect()) {
+                                taskChoiceDto.setPoints(choiceItem.getPoints());
+                                int currentPoints = validatedChallengeItemTaskAnswer.getPoints();
+                                validatedChallengeItemTaskAnswer.setPoints(currentPoints + choiceItem.getPoints());
+                            } else {
+                                validatedChallengeItemTaskAnswer.setCorrect(false);
+                            }
                         }
                         taskChoiceDtoList.add(taskChoiceDto);
                     }
-                    List<ChoiceItem> correctChoiceList = choiceList.stream()
-                            .filter(ChoiceItem::getCorrect)
-                            .collect(Collectors.toList());
                     validatedChallengeItemTaskAnswer.setExplanation(challengeItemTask.getExplanation());
-                    validatedChallengeItemTaskAnswer.setPoints(0);
-                    boolean correctTask = false;
-                    validatedChallengeItemTaskAnswer.setPoints(0);
-                    List<TaskChoiceDto> presumedCorrectList = taskChoiceDtoList.stream()
-                            .filter(TaskChoiceDto::isSelected)
-                            .filter(TaskChoiceDto::isCorrect)
-                            .collect(Collectors.toList());
-                    if (presumedCorrectList.size() == selectedChoiceIds.size()) {
-                        correctTask = true;
-                        validatedChallengeItemTaskAnswer.setPoints(challengeItemTask.getPoints());
-                    }
-
-                    validatedChallengeItemTaskAnswer.setCorrect(correctTask);
                     validatedChallengeItemTaskAnswer.setTaskChoiceDtoList(taskChoiceDtoList);
-                    validatedChallengeItemTaskAnswer.setCorrectChoices(assembleItemTaskChoiceDtoList(correctChoiceList));
                 }
                 validatedChallengeItemAnswer.add(validatedChallengeItemTaskAnswer);
             }
@@ -103,12 +104,18 @@ public class ChallengeService {
         return validatedChallengeAnswer;
     }
 
+
     private ValidatedChallengeItemTaskAnswer checkCorrectOrderTaskItem(ChallengeItemTask challengeItemTask, ChallengeItemTaskAnswer receivedTaskAnswer) {
         ValidatedChallengeItemTaskAnswer validatedChallengeItemTaskAnswer = new ValidatedChallengeItemTaskAnswer();
         validatedChallengeItemTaskAnswer.setChallengeItemTaskId(receivedTaskAnswer.getChallengeItemTaskId());
         validatedChallengeItemTaskAnswer.setQuestion(challengeItemTask.getQuestion());
 
         ChoiceItem correctChoice = challengeItemTask.getChoiceItemList().get(0);
+
+        List<ChoiceItemValue> choiceItemValueCorrectOrder = correctChoice.getChoiceItemValueList();
+
+        Collections.sort(choiceItemValueCorrectOrder);
+
         List<String> selectedChoicesValues = receivedTaskAnswer.getSelectedChoicesValues();
 
         TaskChoiceDto taskChoiceDto = TaskChoiceDto.builder()
@@ -116,7 +123,8 @@ public class ChallengeService {
                 .build();
         validatedChallengeItemTaskAnswer.setPoints(0);
         int choiceValueIdx = 0;
-        for (ChoiceItemValue choiceItemValue : correctChoice.getChoiceItemValueList()) {
+        for (ChoiceItemValue choiceItemValue : choiceItemValueCorrectOrder) {
+
             if (!choiceItemValue.getValue().equals(selectedChoicesValues.get(choiceValueIdx))) {
                 taskChoiceDto.setCorrect(false);
                 validatedChallengeItemTaskAnswer.setExplanation(challengeItemTask.getExplanation());
@@ -129,5 +137,13 @@ public class ChallengeService {
         validatedChallengeItemTaskAnswer.setTaskChoiceDtoList(Collections.singletonList(taskChoiceDto));
         validatedChallengeItemTaskAnswer.setCorrectChoices(assembleItemTaskChoiceDtoList(Collections.singletonList(correctChoice)));
         return validatedChallengeItemTaskAnswer;
+    }
+
+    public void updateChallenge(EditChallengeDto editChallengeDto) {
+        for (ChallengeItemDto2 challengeItemDto2 : editChallengeDto.getChallengeItemList()) {
+            for (ChallengeItemTaskDto2 challengeItemTaskDto2 : challengeItemDto2.getChallengeItemTaskList()) {
+
+            }
+        }
     }
 }

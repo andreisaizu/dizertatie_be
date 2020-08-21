@@ -1,5 +1,7 @@
 package dizertatie.be.dizertatie.domain.bean;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -17,8 +19,14 @@ public class ChoiceItem {
     private Long id;
 
 
+    private String uuid;
+
     @Column(name = "correct", nullable = false)
     private Boolean correct;
+
+
+    @Column(name = "points", nullable = false)
+    private int points;
 
     public ChallengeItemTask getChallengeItemTask() {
         return challengeItemTask;
@@ -32,12 +40,28 @@ public class ChoiceItem {
         this.correct = correct;
     }
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int choicePoints) {
+        this.points = choicePoints;
+    }
     public void setChallengeItemTask(ChallengeItemTask challengeItemTask) {
         this.challengeItemTask = challengeItemTask;
     }
 
     @ManyToOne
     @JoinColumn(name = "challenge_item_task_id", referencedColumnName = "id", nullable = false)
+    @JsonBackReference
     private ChallengeItemTask challengeItemTask;
 
     public List<ChoiceItemValue> getChoiceItemValueList() {

@@ -12,5 +12,6 @@ public class TaskChoiceDto {
     private List<String> values;
     private boolean selected;
     private boolean correct;
+    private int points;
     
 }

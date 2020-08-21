@@ -5,8 +5,8 @@
 
 package dizertatie.be.dizertatie.domain.repository;
 
-import dizertatie.be.dizertatie.domain.bean.Account;
-import dizertatie.be.dizertatie.domain.bean.ChallengeAttempt;
+import dizertatie.be.dizertatie.domain.bean.Course;
+import dizertatie.be.dizertatie.domain.bean.Lesson;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +17,5 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository
-public interface AccountRepository extends CrudRepository<Account, Long> {
-    Account findByUsernameAndPassword(String username, String password);
-    Account findByUsername(String username);
+public interface LessonRepository extends CrudRepository<Lesson, Long> {
 }

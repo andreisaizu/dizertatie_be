@@ -1,15 +1,13 @@
 package dizertatie.be.dizertatie.service;
 
-import dizertatie.be.dizertatie.controller.request.ChallengeItemAnswer;
-import dizertatie.be.dizertatie.controller.request.ValidatedChallengeAnswer;
-import dizertatie.be.dizertatie.controller.request.ValidatedChallengeItemAnswer;
-import dizertatie.be.dizertatie.controller.request.ValidatedChallengeItemTaskAnswer;
+import dizertatie.be.dizertatie.controller.request.*;
 import dizertatie.be.dizertatie.domain.bean.*;
 import dizertatie.be.dizertatie.domain.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,6 +20,8 @@ public class ChallengeAttemptService {
     private final AccountDomainService accountDomainService;
     private final PointsService pointsService;
 
+
+
     private ChallengeAttempt storeChallengeAttempt(ValidatedChallengeAnswer validatedChallengeAnswer) {
         ChallengeAttempt challengeAttempt = new ChallengeAttempt();
         int totalScore = 0;
@@ -29,6 +29,7 @@ public class ChallengeAttemptService {
         Account account = accountDomainService.findById(1L);
         challengeAttempt.setChallenge(challenge);
         challengeAttempt.setAccount(account);
+        challengeAttempt.setCreatedAt(new Date());
 
         List<ChallengeItemAttempt> challengeItemAttemptList = new ArrayList<>();
 
@@ -47,9 +48,7 @@ public class ChallengeAttemptService {
 
                 ChallengeItemTask challengeItemTask = challengeItemTaskDomainService.findById(validatedChallengeItemTaskAnswer.getChallengeItemTaskId());
 
-                if (validatedChallengeItemTaskAnswer.isCorrect()) {
-                    totalScore+=challengeItemTask.getPoints();
-                }
+                totalScore += validatedChallengeItemTaskAnswer.getPoints();
 
                 challengeItemTaskAttempt.setChallengeItemTask(challengeItemTask);
                 challengeItemTaskAttemptList.add(challengeItemTaskAttempt);
@@ -61,12 +60,13 @@ public class ChallengeAttemptService {
         challengeAttempt.setChallengeItemAttemptList(challengeItemAttemptList);
         challengeAttempt.setScore(totalScore);
 
-      return challengeAttemptDomainService.save(challengeAttempt);
+        return challengeAttemptDomainService.save(challengeAttempt);
     }
 
-    public void storeChallengeAttemptAndAwardPoints(ValidatedChallengeAnswer validatedChallengeAnswer){
+    public ChallengeAttempt storeChallengeAttemptAndAwardPoints(ValidatedChallengeAnswer validatedChallengeAnswer) {
         ChallengeAttempt challengeAttempt = storeChallengeAttempt(validatedChallengeAnswer);
         pointsService.awardPoints(challengeAttempt.getId());
+        return challengeAttempt;
     }
 
 }
